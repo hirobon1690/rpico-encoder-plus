@@ -1,28 +1,28 @@
-#include "encoder.h"
-int Encoder::id = 0;
-int Encoder::rotation[8] = {0};
-uint Encoder::offset = 0;
-bool Encoder::isInitialized = false;
+#include "qenc.h"
+int Qenc::id = 0;
+int Qenc::rotation[8] = {0};
+uint Qenc::offset = 0;
+bool Qenc::isInitialized = false;
 // constructor
-// rotary_encoder_A is the pinA for the A of the rotary encoder.
-// The B of the rotary encoder has to be connected to the next GPIO.
-Encoder::Encoder(int pinA)
-    : pinA(pinA) {
+// rotary_Qenc_A is the pinA for the A of the rotary Qenc.
+// The B of the rotary Qenc has to be connected to the next GPIO.
+Qenc::Qenc(int pinA)
+    : Encoder(), pinA(pinA) {
     sm = id;
     id++;
 }
 
-void Encoder::init() {
+void Qenc::init() {
     uint8_t pinB = pinA + 1;
     // pio 0 is used
-    
+
     PIO pio;
     switch (sm) {
         case 0:
-            pio=pio0;
+            pio = pio0;
             break;
         case 1:
-            pio=pio1;
+            pio = pio1;
             break;
         default:
             break;
@@ -69,16 +69,16 @@ void Encoder::init() {
 }
 
 // set the current rotation to a specific value
-void Encoder::set(int _rotation) {
+void Qenc::set(int _rotation) {
     rotation[sm] = _rotation;
 }
 
 // get the current rotation
-int Encoder::get(void) {
+int Qenc::get(void) {
     return rotation[sm];
 }
 
-void Encoder::pio_irq_handler_0() {
+void Qenc::pio_irq_handler_0() {
     // test if irq 0 was raised
     if (pio0_hw->irq & 1) {
         rotation[0] = rotation[0] - 1;
@@ -91,7 +91,7 @@ void Encoder::pio_irq_handler_0() {
     pio0_hw->irq = 3;
 }
 
-void Encoder::pio_irq_handler_1() {
+void Qenc::pio_irq_handler_1() {
     // test if irq 0 was raised
     if (pio1_hw->irq & 1) {
         rotation[1] = rotation[1] - 1;

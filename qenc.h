@@ -1,9 +1,10 @@
 #pragma once
 #include "encoder.pio.h"
+#include "encoderBase.h"
 
-class Encoder {
+class Qenc : public Encoder {
    public:
-    Encoder(int pin);
+    Qenc(int pin);
     void init();
     void set(int);
     int get();
